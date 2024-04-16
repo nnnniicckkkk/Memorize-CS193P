@@ -28,8 +28,24 @@ let themes: [Theme] = [
         baseColor: Color.yellow),
     Theme(name: "Winter",
           emojis: ["🧤","🌨️","☃️","⛄️","☕️","🥶","🎅", "🧣","🐻‍❄️", "🤶", "🥌"],
-        baseColor: Color.blue)
+          baseColor: Color.blue),
+    Theme(name: "Spring",
+        emojis: ["🌸", "🌼", "🌷", "🌱", "🌿", "🌺", "🦋", "🌞", "🐝", "🌻", "🍃", "🌈", "🌱", "☔️", "🌦"],
+          baseColor: Color.green),
+    Theme(name: "Beach",
+        emojis: ["🏖️", "🌊", "🏄‍♂️", "🐚", "🦀", "🐠", "🏝️", "👙", "🍹", "🌞"],
+        baseColor: Color.brown.opacity(0.5)),
+    Theme(name: "Food",
+          emojis: ["🍔", "🍕", "🌮", "🍣", "🥗", "🍝", "🍰", "🍩", "🍦", "🍪"],
+          baseColor: Color.red),
+    Theme(name: "Purple",
+          emojis: ["💜", "🔮", "☂️", "🦄", "👾", "🍇", "🎵", "👚", "🦉", "🌌"],
+          baseColor: Color.purple),
+    Theme(name: "Rainbow",
+          emojis: ["🌈", "🦄", "🎨", "🍭", "🌺", "🎈", "🔮", "🌞", "🌼", "🎵"],
+          baseColor: Color.indigo
+            
+         )
     
-
-
 ]
+

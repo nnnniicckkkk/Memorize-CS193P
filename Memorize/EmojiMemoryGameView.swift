@@ -23,9 +23,17 @@ struct EmojiMemoryGameView: View {
                 VStack {
                     Text("Memorize!")
                         .font(.largeTitle)
-                    Text("\(game.theme.name) theme")
-                        .font(.caption)
-                        .foregroundStyle(game.theme.baseColor.opacity(0.75))
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 10)
+                        
+                        Text("\(game.theme.name) theme")
+                            .font(.title2)
+                            .foregroundStyle(.white)
+                    }
+                    .frame(maxHeight: 25)
+                    .onTapGesture {
+                        game.startNewGame()
+                    }
                 }
                 ScrollView {
                     cards
