@@ -37,11 +37,11 @@ struct EmojiMemoryGameView: View {
     
     var background: some View {
         LinearGradient(colors:
-                        [game.theme.baseColor.opacity(0.2),
-                         game.theme.baseColor.opacity(0.4),
-                         game.theme.baseColor.opacity(0.4),
+                        [game.theme.baseColor.opacity(0),
                          game.theme.baseColor.opacity(0.2),
-                         game.theme.baseColor.opacity(0.1),
+                         game.theme.baseColor.opacity(0.4),
+                         game.theme.baseColor.opacity(0.4),
+                         game.theme.baseColor.opacity(0.5),
                         ],
                        startPoint: .bottom,
                        endPoint: .top).ignoresSafeArea()
@@ -72,16 +72,37 @@ struct EmojiMemoryGameView: View {
     }
     
     var cards: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 85),spacing: 0)]) {
-            ForEach(game.cards) { card in
-                CardView(card)
-                    .aspectRatio(2/3, contentMode: .fit)
-                    .padding(4)
-                    .onTapGesture {
-                        game.choose(card)
-                    }
+        GeometryReader { geometry in
+            let gridItemSize = gridItemWidthThatFits(count: game.cards.count, size: geometry.size, atAspectRatio: 2/3)
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: gridItemSize), spacing: 0)],spacing: 0) {
+                ForEach(game.cards) { card in
+                    CardView(card)
+                        .aspectRatio(2/3, contentMode: .fit)
+                        .padding(4)
+                        .onTapGesture {
+                            game.choose(card)
+                        }
                 }
+            }
         }
+    }
+    
+    // TODO: figure out why this code does not produce gridItems
+    func gridItemWidthThatFits(count: Int, size: CGSize, atAspectRatio aspectRatio: CGFloat) -> CGFloat {
+        let count = CGFloat(count)
+        var columnCount = 1.0
+        repeat {
+            let width = size.width / columnCount
+            let height = width / aspectRatio
+            
+            let rowCount = (count / columnCount).rounded(.up)
+            if rowCount * height < size.height {
+                return (size.width / columnCount).rounded(.down)
+            }
+            columnCount += 1
+        } while columnCount < count
+        return min(size.width / count, size.height * aspectRatio).rounded(.down)
+        
     }
     
     var scoreButtonView: some View {
