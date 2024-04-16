@@ -13,6 +13,7 @@ import SwiftUI
 struct EmojiMemoryGameView: View {
     
     @ObservedObject var game: EmojiMemoryGame
+ 
     
     
     var body: some View {
@@ -32,13 +33,19 @@ struct EmojiMemoryGameView: View {
                 }
                 Spacer()
                 HStack {
-                    Text("Score: ")
+                    HStack{
+                        Text("Score: ")
+                        Spacer()
+                        Text("\(game.score)")
+                            .padding(.trailing, 10)
+                            }
                         .font(.title)
                         .padding(.leading, 10)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundStyle(.white)
                         .background(game.theme.baseColor.opacity(0.75))
                         .cornerRadius(10)
+                    
                     Button("Start a new game!") {
                         game.startNewGame()
                     }

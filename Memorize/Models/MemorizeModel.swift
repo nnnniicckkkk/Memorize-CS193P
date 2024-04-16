@@ -35,23 +35,20 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                        cards[chosenIndex].isMatched = true
                        cards[potentialMatchIndex].isMatched = true
 
-//                       let currentCardTimestamp = Date().timeIntervalSinceReferenceDate
-//                       let multiplier = max(5 - (currentCardTimestamp - firstCardTimestamp), 1)
                        score += Int(2 /** multiplier*/)
                    }
                    else {
-                       score += seenCards.firstIndex(of: cards[potentialMatchIndex]) != nil ? -1 : 0
-                       score += seenCards.firstIndex(of: cards[chosenIndex]) != nil ? -1 : 0
+                       score += seenCards.firstIndex(of: cards[potentialMatchIndex]) != nil && seenCards.firstIndex(of: cards[chosenIndex]) != nil ? 0 : -1
+                      
                    }
                    cards[chosenIndex].isFaceUp = true
                }
                else {
                    indexOfOnlyFaceUpCard = chosenIndex
-//                   firstCardTimestamp = Date().timeIntervalSinceReferenceDate
-               }
-           }
-       }
-
+            }
+        }
+    }
+    
     
     mutating func shuffle() {
         cards.shuffle()
