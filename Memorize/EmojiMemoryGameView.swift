@@ -20,49 +20,38 @@ struct EmojiMemoryGameView: View {
         ZStack {
             
             VStack {
-                VStack {
-                    Text("Memorize!")
-                        .font(.largeTitle)
-                    ZStack{
-                        RoundedRectangle(cornerRadius: 10)
-                        
-                        Text("\(game.theme.name) theme")
-                            .font(.title2)
-                            .foregroundStyle(.white)
-                    }
-                    .frame(maxHeight: 25)
-                    .onTapGesture {
-                        game.startNewGame()
-                    }
-                }
+                header
+                
                 ScrollView {
                     cards
                         .animation(.default, value: game.cards)
                 }
                 Spacer()
-                HStack {
-                    HStack{
-                        Text("Score: ")
-                        Spacer()
-                        Text("\(game.score)")
-                            .padding(.trailing, 10)
-                            }
-                        .font(.title)
-                        .padding(.leading, 10)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .foregroundStyle(.white)
-                        .background(game.theme.baseColor.opacity(0.75))
-                        .cornerRadius(10)
-                    
-                    Button("Start a new game!") {
-                        game.startNewGame()
-                    }
-                }
+                
+                scoreButtonView
             }
             
         }
         .foregroundStyle(game.theme.baseColor)
         .padding()
+    }
+    
+    var header: some View {
+        VStack {
+            Text("Memorize!")
+                .font(.largeTitle)
+            ZStack{
+                RoundedRectangle(cornerRadius: 10)
+                
+                Text("\(game.theme.name) theme")
+                    .font(.title2)
+                    .foregroundStyle(.white)
+            }
+            .frame(maxHeight: 25)
+            .onTapGesture {
+                game.startNewGame()
+            }
+        }
     }
     
     var cards: some View {
@@ -80,7 +69,29 @@ struct EmojiMemoryGameView: View {
         
     }
     
+    var scoreButtonView: some View {
+        HStack {
+            HStack{
+                Text("Score: ")
+                Spacer()
+                Text("\(game.score)")
+                    .padding(.trailing, 10)
+                    }
+                .font(.title)
+                .padding(.leading, 10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .foregroundStyle(.white)
+                .background(game.theme.baseColor.opacity(0.75))
+                .cornerRadius(10)
+            
+            Button("Start a new game!") {
+                game.startNewGame()
+            }
+        }
+    }
+    
 }
+
 
 struct CardView: View {
     
