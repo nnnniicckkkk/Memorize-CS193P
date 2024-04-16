@@ -25,7 +25,7 @@ let themes: [Theme] = [
         baseColor: Color.orange),
     Theme(name: "Summer",
         emojis: ["🔥","⛺️","🌊","🎣","🧨","☀️","🏄","🍖","🌭","🔭", "🌞"],
-        baseColor: Color.yellow),
+          baseColor: Color.yellow),
     Theme(name: "Winter",
           emojis: ["🧤","🌨️","☃️","⛄️","☕️","🥶","🎅", "🧣","🐻‍❄️", "🤶", "🥌"],
           baseColor: Color.blue),

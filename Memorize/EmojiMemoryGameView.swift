@@ -7,51 +7,68 @@
 
 import SwiftUI
 
-
-
-
 struct EmojiMemoryGameView: View {
     
     @ObservedObject var game: EmojiMemoryGame
- 
-    
-    
+
     var body: some View {
-        ZStack {
-            
-            VStack {
-                header
-                
-                ScrollView {
-                    cards
-                        .animation(.default, value: game.cards)
+        ZStack{
+            //background
+            background
+        
+            //foreground
+            ZStack {
+                VStack {
+                    header
+                    
+                    ScrollView {
+                        cards
+                            .animation(.default, value: game.cards)
+                    }
+                    Spacer()
+                    
+                    scoreButtonView
                 }
-                Spacer()
-                
-                scoreButtonView
             }
-            
+            .foregroundStyle(game.theme.baseColor)
+            .padding()
         }
-        .foregroundStyle(game.theme.baseColor)
-        .padding()
     }
     
+    var background: some View {
+        LinearGradient(colors:
+                        [game.theme.baseColor.opacity(0.2),
+                         game.theme.baseColor.opacity(0.4),
+                         game.theme.baseColor.opacity(0.4),
+                         game.theme.baseColor.opacity(0.2),
+                         game.theme.baseColor.opacity(0.1),
+                        ],
+                       startPoint: .bottom,
+                       endPoint: .top).ignoresSafeArea()
+    }
     var header: some View {
         VStack {
-            Text("Memorize!")
+            ZStack {
+                Text("Memorize!")
+                    .foregroundStyle(.white)
+                Text("Memorize!")
+            }
                 .font(.largeTitle)
             ZStack{
                 RoundedRectangle(cornerRadius: 10)
-                
+                    .fill(game.theme.baseColor.opacity(0.75))
+                    
                 Text("\(game.theme.name) theme")
                     .font(.title2)
                     .foregroundStyle(.white)
             }
+            
             .frame(maxHeight: 25)
             .onTapGesture {
                 game.startNewGame()
             }
         }
+        
     }
     
     var cards: some View {
@@ -63,10 +80,8 @@ struct EmojiMemoryGameView: View {
                     .onTapGesture {
                         game.choose(card)
                     }
-            }
-            
+                }
         }
-        
     }
     
     var scoreButtonView: some View {
@@ -87,16 +102,16 @@ struct EmojiMemoryGameView: View {
             Button("Start a new game!") {
                 game.startNewGame()
             }
+            .buttonStyle(.borderedProminent)
+            .tint(game.theme.baseColor.opacity(0.2))
         }
     }
-    
 }
 
 
 struct CardView: View {
     
     let card: MemoryGame<String>.Card
-    
     
     init(_ card: MemoryGame<String>.Card) {
         self.card = card
@@ -105,7 +120,6 @@ struct CardView: View {
     var body: some View {
         ZStack {
             let base = RoundedRectangle(cornerRadius: 12)
-                
                 
             Group {
                 base.fill(.white)
@@ -122,11 +136,7 @@ struct CardView: View {
             
             base.fill().opacity(card.isFaceUp ? 0 : 1)
         }
-        
         .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
-        
-        
-        
     }
 }
 
