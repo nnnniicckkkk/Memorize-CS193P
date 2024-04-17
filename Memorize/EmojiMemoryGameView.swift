@@ -21,15 +21,19 @@ struct EmojiMemoryGameView: View {
                             .animation(.default, value: game.cards)
                             
                     }
+                    .scrollClipDisabled()
+                    .zIndex(2)
                     
                     
                     Group{
                         header
+                            .zIndex(1)
                             
                         scoreButtonView
                         
                     }
-                    .background(.ultraThinMaterial)
+                    .offset(y: 20)
+                   
                     
                 }
                 .foregroundStyle(game.theme.baseColor)
