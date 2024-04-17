@@ -10,30 +10,30 @@ import SwiftUI
 struct EmojiMemoryGameView: View {
     
     @ObservedObject var game: EmojiMemoryGame
+    var aspectRatio: CGFloat = 2/3
 
     var body: some View {
         ZStack{
-            //background
-            background
-        
-            //foreground
-            ZStack {
+                background
                 VStack(spacing: 0) {
-                    header
-                    
-                    ScrollView {
+                    ScrollView{
                         cards
                             .animation(.default, value: game.cards)
-                        
+                            
                     }
                     
-    
-                    scoreButtonView
+                    
+                    Group{
+                        header
+                            
+                        scoreButtonView
                         
+                    }
+                    .background(.ultraThinMaterial)
+                    
                 }
-            }
-            .foregroundStyle(game.theme.baseColor)
-            .padding()
+                .foregroundStyle(game.theme.baseColor)
+                .padding()
         }
     }
     
@@ -73,42 +73,20 @@ struct EmojiMemoryGameView: View {
         
     }
     
-    @ViewBuilder
-    var cards: some View {
-        let aspectRatio: CGFloat = 2/3
-        GeometryReader { geometry in
-            let gridItemSize = gridItemWidthThatFits(count: game.cards.count, size: geometry.size, atAspectRatio: aspectRatio)
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: gridItemSize * 15), spacing: 0)],spacing: 0) {
-                ForEach(game.cards) { card in
-                    CardView(card)
-                        .aspectRatio(aspectRatio, contentMode: .fit)
-                        .padding(4)
-                        .onTapGesture {
-                            game.choose(card)
-                        }
+    private var cards: some View {
+        AspectVGrid(items: game.cards, aspectRatio: aspectRatio) { card in
+            CardView(card)
+                .padding(3)
+                
+               
+                .onTapGesture {
+                    game.choose(card)
                 }
-            }
         }
     }
     
-    // TODO: figure out why this code does not produce gridItems
-    func gridItemWidthThatFits(count: Int, size: CGSize, atAspectRatio aspectRatio: CGFloat) -> CGFloat {
-        let count = CGFloat(count)
-        var columnCount = 1.0
-        repeat {
-            let width = size.width / columnCount
-            let height = width / aspectRatio
-            
-            let rowCount = (count / columnCount).rounded(.up)
-            if rowCount * height < size.height {
-                return (size.width / columnCount).rounded(.down)
-            }
-            columnCount += 1
-        } while columnCount < count
-        return min(size.width / count, size.height * aspectRatio).rounded(.down)
-        
-        
-    }
+    
+    
     private var scoreButtonView: some View {
         VStack {
             HStack{
@@ -132,7 +110,7 @@ struct EmojiMemoryGameView: View {
                 .tint(game.theme.baseColor.opacity(0.2))
             }
         }
-        .offset(y: 20)
+       
     }
 }
 
