@@ -26,8 +26,8 @@ struct EmojiMemoryGameView: View {
                             .animation(.default, value: game.cards)
                         
                     }
-                    .padding()
-              
+                    
+    
                     scoreButtonView
                         
                 }
@@ -37,7 +37,7 @@ struct EmojiMemoryGameView: View {
         }
     }
     
-    var background: some View {
+    private var background: some View {
         LinearGradient(colors:
                         [game.theme.baseColor.opacity(0),
                          game.theme.baseColor.opacity(0.2),
@@ -48,7 +48,7 @@ struct EmojiMemoryGameView: View {
                        startPoint: .bottom,
                        endPoint: .top).ignoresSafeArea()
     }
-    var header: some View {
+    private var header: some View {
         HStack{
             ZStack {
                 Text("Memorize!")
@@ -73,13 +73,15 @@ struct EmojiMemoryGameView: View {
         
     }
     
+    @ViewBuilder
     var cards: some View {
+        let aspectRatio: CGFloat = 2/3
         GeometryReader { geometry in
-            let gridItemSize = gridItemWidthThatFits(count: game.cards.count, size: geometry.size, atAspectRatio: 1)
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: (gridItemSize * 7) + 2.5), spacing: 0)],spacing: 0) {
+            let gridItemSize = gridItemWidthThatFits(count: game.cards.count, size: geometry.size, atAspectRatio: aspectRatio)
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: gridItemSize * 15), spacing: 0)],spacing: 0) {
                 ForEach(game.cards) { card in
                     CardView(card)
-                        .aspectRatio(2/3, contentMode: .fit)
+                        .aspectRatio(aspectRatio, contentMode: .fit)
                         .padding(4)
                         .onTapGesture {
                             game.choose(card)
@@ -89,49 +91,26 @@ struct EmojiMemoryGameView: View {
         }
     }
     
-//    // TODO: figure out why this code does not produce gridItems
-//    func gridItemWidthThatFits(count: Int, size: CGSize, atAspectRatio aspectRatio: CGFloat) -> CGFloat {
-//        let count = CGFloat(count)
-//        var columnCount = 1.0
-//        repeat {
-//            let width = size.width / columnCount
-//            let height = width / aspectRatio
-//            
-//            let rowCount = (count / columnCount).rounded(.up)
-//            if rowCount * height < size.height {
-//                return (size.width / columnCount).rounded(.down)
-//            }
-//            columnCount += 1
-//        } while columnCount < count
-//        print(min(size.width / count, size.height * aspectRatio).rounded(.down))
-//        return min(size.width / count, size.height * aspectRatio).rounded(.down)
-//        
-//        
-//    }
+    // TODO: figure out why this code does not produce gridItems
     func gridItemWidthThatFits(count: Int, size: CGSize, atAspectRatio aspectRatio: CGFloat) -> CGFloat {
-        let totalWidth = size.width
-        let totalHeight = size.height
-        let itemAspectRatio = aspectRatio
-
-        // Calculate the number of columns needed to fit all cards
-        var columns = 1
-        while CGFloat(columns) * itemAspectRatio * totalHeight <= totalWidth {
-            columns += 1
-        }
-
-        // Adjust for the extra column created by the loop
-        columns -= 1
-
-        // Calculate the width of each item based on the number of columns
-        let itemWidth = totalWidth / CGFloat(columns)
-
-        return itemWidth
-    }
-
-    
-    var scoreButtonView: some View {
-        VStack {
+        let count = CGFloat(count)
+        var columnCount = 1.0
+        repeat {
+            let width = size.width / columnCount
+            let height = width / aspectRatio
             
+            let rowCount = (count / columnCount).rounded(.up)
+            if rowCount * height < size.height {
+                return (size.width / columnCount).rounded(.down)
+            }
+            columnCount += 1
+        } while columnCount < count
+        return min(size.width / count, size.height * aspectRatio).rounded(.down)
+        
+        
+    }
+    private var scoreButtonView: some View {
+        VStack {
             HStack{
                 HStack{
                     Text("Score: ")
@@ -152,9 +131,8 @@ struct EmojiMemoryGameView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(game.theme.baseColor.opacity(0.2))
             }
-            
         }
-        
+        .offset(y: 20)
     }
 }
 
