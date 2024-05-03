@@ -7,7 +7,11 @@
 
 import SwiftUI
 
+/// An individual card view
 struct CardView: View {
+    
+    // MARK: - Type Aliases
+
     
     typealias Card = MemoryGame<String>.Card
     
@@ -43,12 +47,22 @@ struct CardView: View {
                     .multilineTextAlignment(.center)
                     .aspectRatio(1, contentMode: .fit)
                     .padding(Constants.Pie.inset)
+                    .rotationEffect(.degrees(card.isMatched ? 360 : 0))
+                    .animation(.spin(duration: 1), value: card.isMatched)
             )
             .padding(Constants.inset)
-            .cardify(isFaceUp: true)
+            .cardify(isFaceUp: card.isFaceUp)
             .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
     }
 }
+
+extension Animation {
+    static func spin(duration: TimeInterval) -> Animation {
+        .linear(duration: 1).repeatForever(autoreverses: false)
+    }
+}
+
+// MARK: - Previews
 
 #Preview {
    

@@ -8,17 +8,21 @@
 import Foundation
 import SwiftUI
 
+/// A theme for the emoji memory game
 struct Theme {
+    
+    /// The name of the theme
     var name: String
+    /// The emojis for the theme
     var emojis: [String]
+    /// The number of pairs of cards to use in the game, if nil a random number is used
     var numberOfPairsOfCards: Int?
+    /// The base color of the theme
     var baseColor: Color
 }
+
+/// An array of themes for the emoji memory game. 
 let themes: [Theme] = [
-    
-    //due to the way the viewModel is set up, there needs to be at least 10 options to choose from
-    // TODO: change index to a min/max set up??
-    
     
     Theme(name: "Fall",
         emojis: ["🍁","🍂","🎃","🍫","🧙‍♀️","💀","☠️","🌝","👻","👽","🤖"],

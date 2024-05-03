@@ -9,8 +9,9 @@ import SwiftUI
 
 struct EmojiMemoryGameView: View {
     
+    typealias Card = MemoryGame<String>.Card
     @ObservedObject var game: EmojiMemoryGame
-    var aspectRatio: CGFloat = 2/3
+    
 
     var body: some View {
         ZStack{
@@ -18,23 +19,18 @@ struct EmojiMemoryGameView: View {
                 VStack(spacing: 0) {
                     ScrollView{
                         cards
-                            .animation(.default, value: game.cards)
-                            
                     }
                     .scrollClipDisabled()
-                    .zIndex(2)
-                    
-                    
+                    .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+                   
                     Group{
                         header
-                            .zIndex(1)
-                            
+                          
                         scoreButtonView
                         
                     }
-                    .offset(y: 20)
-                   
-                    
+                    .background(.ultraThickMaterial)
+                    .offset(y: 25)
                 }
                 .foregroundStyle(game.theme.baseColor)
                 .padding()
@@ -44,9 +40,8 @@ struct EmojiMemoryGameView: View {
     private var background: some View {
         
         
-        LinearGradient(colors: backgroundColors,
-                       startPoint: .bottom,
-                       endPoint: .top).ignoresSafeArea()
+        LinearGradient(colors: backgroundColors, startPoint: .bottom, endPoint: .top)
+            .ignoresSafeArea()
     }
     
     private var backgroundColors: [Color] {
@@ -75,25 +70,30 @@ struct EmojiMemoryGameView: View {
             }
             
             .frame(maxHeight: 25)
-            .onTapGesture {
-                game.startNewGame()
-            }
+            
         }
         
     }
     
+    let aspectRatio: CGFloat = 2/3
     private var cards: some View {
+        
         AspectVGrid(items: game.cards, aspectRatio: aspectRatio) { card in
             CardView(card)
                 .padding(3)
-                
-               
+                .overlay(FlyingNumber(number: scoreChange(causedBy: card)))
                 .onTapGesture {
-                    game.choose(card)
+                    withAnimation(.easeInOut(duration: 0.75)){
+                        game.choose(card)
+                        
+                    }
                 }
         }
     }
     
+    private func scoreChange(causedBy card: Card) -> Int {
+        return 0
+    }
     
     
     private var scoreButtonView: some View {
@@ -103,6 +103,7 @@ struct EmojiMemoryGameView: View {
                     Text("Score: ")
                     Spacer()
                     Text("\(game.score)")
+                        .animation(nil)
                         .padding(.trailing, 10)
                 }
                 .font(.title)
@@ -113,7 +114,10 @@ struct EmojiMemoryGameView: View {
                 .cornerRadius(10)
                 
                 Button("Start a new game!") {
-                    game.startNewGame()
+                    withAnimation {
+                        game.startNewGame()
+                    }
+                    
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(game.theme.baseColor.opacity(0.2))

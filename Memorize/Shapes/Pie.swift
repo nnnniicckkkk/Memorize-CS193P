@@ -8,14 +8,34 @@
 import SwiftUI
 import CoreGraphics
 
+
+/// A shape that represents a pie slice.
+///
+/// Use a `Pie` shape to create a pie slice with a specified start angle, end angle, and direction.
+///
+/// Example:
+/// ```swift
+/// Pie(startAngle: .degrees(0), endAngle: .degrees(90), clockwise: true)
+///     .foregroundColor(.blue)
+/// ```
+///
 struct Pie: Shape {
-    
+    /// The starting angle of the pie slice
     var startAngle: Angle = .zero
+    /// The ending angle of the pie slice.
     let endAngle: Angle
+    /// A boolean value indicating if the pie slice is drawn clockwise.
     var clockwise = true
     
+    /// Creates a pie slice shape.
+        /// - Parameters:
+        ///   - startAngle: The starting angle of the pie slice. Defaults to `.zero`.
+        ///   - endAngle: The ending angle of the pie slice.
+        ///   - clockwise: A boolean value indicating whether the pie slice is drawn clockwise. Defaults to `true`.
     func path(in rect: CGRect) -> Path {
-        
+        /// Returns a path that represents the pie slice.
+          /// - Parameter rect: The bounding rectangle of the pie slice.
+          /// - Returns: A path that represents the pie slice.
         let startAngle = startAngle - .degrees(90)
         let endAngle = endAngle - .degrees(90)
     
