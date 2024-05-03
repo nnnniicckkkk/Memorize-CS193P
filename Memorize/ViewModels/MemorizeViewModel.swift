@@ -11,11 +11,13 @@ import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
     
-    @Published private var game: MemoryGame<String>
+    typealias Card = MemoryGame<String>
+    
+    @Published private var game: Card
     
     private(set) var theme: Theme
   
-    private static func createMemoryGame(theme: Theme) -> MemoryGame<String> {
+    private static func createMemoryGame(theme: Theme) -> Card {
         let emojis: Array<String> = theme.emojis.shuffled()
         var cardsToShow = theme.numberOfPairsOfCards ?? Int.random(in: 3...theme.emojis.count)
         if cardsToShow > theme.emojis.count {
@@ -31,7 +33,7 @@ class EmojiMemoryGame: ObservableObject {
         game = EmojiMemoryGame.createMemoryGame(theme: selectedTheme)
     }
     
-    var cards: Array<MemoryGame<String>.Card> {
+    var cards: Array<Card.Card> {
         return game.cards
     }
     
@@ -39,7 +41,7 @@ class EmojiMemoryGame: ObservableObject {
         return game.score
     }
     
-    func choose(_ card: MemoryGame<String>.Card) {
+    func choose(_ card: Card.Card) {
         game.choose(card: card)
     }
     // MARK: - INTENTS

@@ -42,15 +42,20 @@ struct EmojiMemoryGameView: View {
     }
     
     private var background: some View {
-        LinearGradient(colors:
-                        [game.theme.baseColor.opacity(0),
-                         game.theme.baseColor.opacity(0.2),
-                         game.theme.baseColor.opacity(0.4),
-                         game.theme.baseColor.opacity(0.4),
-                         game.theme.baseColor.opacity(0.5),
-                        ],
+        
+        
+        LinearGradient(colors: backgroundColors,
                        startPoint: .bottom,
                        endPoint: .top).ignoresSafeArea()
+    }
+    
+    private var backgroundColors: [Color] {
+        [game.theme.baseColor.opacity(0),
+         game.theme.baseColor.opacity(0.2),
+         game.theme.baseColor.opacity(0.4),
+         game.theme.baseColor.opacity(0.4),
+         game.theme.baseColor.opacity(0.5),
+        ]
     }
     private var header: some View {
         HStack{
@@ -119,36 +124,7 @@ struct EmojiMemoryGameView: View {
 }
 
 
-struct CardView: View {
-    
-    let card: MemoryGame<String>.Card
-    
-    init(_ card: MemoryGame<String>.Card) {
-        self.card = card
-    }
-    
-    var body: some View {
-        ZStack {
-            let base = RoundedRectangle(cornerRadius: 12)
-                
-            Group {
-                base.fill(.white)
-                
-                base.strokeBorder(lineWidth: 2)
-                
-                Text(card.content)
-                    .font(.system(size: 200))
-                    .minimumScaleFactor(0.01)
-                    .aspectRatio(1, contentMode: .fit)
-                    
-            }
-            .opacity(card.isFaceUp ? 1 : 0)
-            
-            base.fill().opacity(card.isFaceUp ? 0 : 1)
-        }
-        .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
-    }
-}
+
 
 #Preview {
     EmojiMemoryGameView(game: EmojiMemoryGame())
